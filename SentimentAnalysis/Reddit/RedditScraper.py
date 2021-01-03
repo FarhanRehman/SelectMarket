@@ -18,8 +18,8 @@ class RedditScraper:
         )
 
         # Use this to increment statistics (Comments count, Mentions count, Positions count)
-        DB = DatabaseManager()
-        DB.incrementStatistics("COMMENTS")
+        # DB = DatabaseManager()
+        # DB.incrementStatistics("COMMENTS")
 
     # filter by search/flair
     def searchSubreddit(self, query, sort, syntax, timeFilter):
@@ -94,8 +94,10 @@ class RedditScraper:
         submission.comment_limit = round(submission.num_comments * 0.25)
 
         submission.comments.replace_more(limit=None, threshold=0)
+        
         for comment in submission.comments:
-            commentsList.append(f"{counter}) {comment.body} | {comment.points}")
+            print(comment)
+            commentsList.append(comment.body)
         
         return commentsList
 

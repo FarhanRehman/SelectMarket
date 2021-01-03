@@ -48,9 +48,9 @@ class DatabaseManager:
         
         return True
 
-    def incrementStatistics(self, column):
+    def incrementStatistics(self, column, value=1):
         # UPDATE {Table} SET {Column} = {Column} + {Value} WHERE {Condition}
-        self.cursor.execute(f"UPDATE STATISTICS SET {column} = {column} + 1")
+        self.cursor.execute(f"UPDATE STATISTICS SET {column} = {column} + {value}")
         
         self.connection.commit()
 

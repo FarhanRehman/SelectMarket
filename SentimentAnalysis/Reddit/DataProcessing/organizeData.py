@@ -1,8 +1,8 @@
 # 1) Getting the data - in this case, we'll be scraping data from a website
 
 # Import Libraries
-from Database.DB import DatabaseManager
-from cleanData import CleanData
+from Database.db import DatabaseManager
+from DataProcessing.cleanData import CleanData
 import yfinance as yf
 import timeit
 import re
@@ -17,33 +17,25 @@ import re
 
 
 class OrganizeData:
-    def __init__(self, subreddit):
+    def __init__(self, text):
         # Initialize Variables
-        pass
+        self.text = text
 
     def valtiadeTickers(self, tickers):
         valid = set()
         DB = DatabaseManager()
         for ticker in tickers:
-            if ticker not in self.blacklistTickers:
-                # is it faster to search many at a time or one by one?
-                # search DB for ticker to check if it is valid
-                if DB.searchString(ticker):
-                    valid.add(ticker)
+            # search DB for ticker to check if it is valid
+            if DB.searchString(ticker):
+                valid.add(ticker)
 
         return valid
 
     # TODO: increment mentions
-
     # This function wil parse all tickers and related text from a submission/comment, and output it in a dictionary/csv
-    def parseTickers(self, text):
-        # GET CLEANED DATA HERE
-        text = CleanData(text)
-
-        print(text)
-        
+    def parseTickers(self):        
         # Regex to identify stock tickers, we use a set here to avoid duplicates
-        tickers = set(re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", text))
+        tickers = set(re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", self.text))
 
         # loop through tickers and verify valid ones
         tickers = self.valtiadeTickers(tickers)
@@ -52,8 +44,9 @@ class OrganizeData:
         tickers = dict.fromkeys(tickers, 0)
         
         # Parse text based on how many tickers are in the text
-        if len(tickers) == 1:
-            tickers = {tickers[0]: text}
+        print(tickers)
+        if len(tickers) == 0:
+            return None
         else:
 
             # TODO: check out some ways to split into sentences (should seperate by \n as well), check out nltk and regex examples
@@ -63,7 +56,7 @@ class OrganizeData:
             # sentences = tokenize.sent_tokenize(text)
             # print(sentences)
 
-            sentences = CleanData.split_into_sentences(text)
+            sentences = CleanData(self.text).split_into_sentences(self.text)
             # print(sentences)
 
             # TODO: if ticker appears twice it will overright previous text so find a fix for that
@@ -72,9 +65,6 @@ class OrganizeData:
                 for key in tickers:
                     if key in sentence:
                         tickers[key] = sentence
-        return tickers
+            return tickers
 
 
-r = GetData("WallStreetBets")
-asd = r.parseTickers()
-print(asd)

@@ -1,0 +1,1 @@
+# TODO: scrape alerts, sentiment from discord groups

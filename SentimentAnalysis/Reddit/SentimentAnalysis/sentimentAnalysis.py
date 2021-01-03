@@ -1,5 +1,6 @@
 # TODO: sentiment analysis on reddit comments and submissions
-# TODO: recognize positions
+# TODO: recognize option/stock positions: options: ticker, strike price, expiration, entry(optional) stock: ticker, entry(optional) + bullish sentiment 
+# TODO: use kaggle to prep sentiment analysis
 
 class SentimentAnalysis:
     def __init__(self):
