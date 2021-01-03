@@ -9,8 +9,8 @@
 
 
 # Import Libraries
-# from Data import RedditScraper
-from Data import getData
+import RedditScraper
+# from Data import getData
 
 # from Database.db import DatabaseManager
 

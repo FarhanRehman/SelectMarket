@@ -1,6 +1,6 @@
 # Import Libraries
-from config import config
 from Database.db import DatabaseManager
+from config import config
 import praw
 
 # 1) Getting the data - in this case, we'll be scraping data from a reddit with PRAW
