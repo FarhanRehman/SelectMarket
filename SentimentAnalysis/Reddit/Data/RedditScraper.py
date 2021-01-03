@@ -1,6 +1,8 @@
 # Import Libraries
-import config
+from config import config
 import praw
+
+
 
 # TODO: Set up sqlite databasse (inside DB, keep count of number of comments searched)
 
@@ -96,9 +98,9 @@ class RedditScraper:
         return commentsList
 
 # reddit = praw.Reddit(
-#     client_id=config.CLIENT_ID,
-#     client_secret=config.CLIENT_SECRET,
-#     user_agent=config.USER_AGENT
+#     client_id=CLIENT_ID,
+#     client_secret=CLIENT_SECRET,
+#     user_agent=USER_AGENT
 # )
 
 # subreddit = reddit.subreddit("WallStreetBets")
@@ -106,6 +108,3 @@ class RedditScraper:
 # #     print(comment.parent_id, comment.author, comment.body)
 # asd = subreddit.sticky()
 # print(asd.title)
-
-# for submission in subreddit.stream():
-#     print(submission)

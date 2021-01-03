@@ -1,11 +1,10 @@
 # 1) Getting the data - in this case, we'll be scraping data from a website
 
 # Import Libraries
-from RedditScraper import RedditScraper 
 from nltk import tokenize
 import yfinance as yf
 import timeit
-import csv
+from Database.db import DatabaseManager
 import re
 
 
@@ -30,14 +29,19 @@ class GetData:
     # TODO: recognize tickers that are misspelled, lowercase, using the company name instead of ticker
     def valtiadeTickers(self, tickers):
         valid = set()
+        db = DatabaseManager()
         for ticker in tickers:
             if ticker not in self.blacklistTickers:
+                # is it faster to search many at a time or one by one?
                 # search csv file for ticker to check if it is valid
-                with open('C:/Users/farha/Documents/GitHub/SelectMarket/SentimentAnalysis/Reddit/STOCKS.csv', 'rt') as csvfile:
-                    my_content = csv.reader(csvfile, delimiter=',')
-                    for row in my_content:
-                        if ticker in row:
-                            valid.add(ticker)
+                if db.searchString(ticker):
+                    valid.add(ticker)
+
+                # with open('C:/Users/farha/Documents/GitHub/SelectMarket/SentimentAnalysis/Reddit/STOCKS.csv', 'rt') as csvfile:
+                #     my_content = csv.reader(csvfile, delimiter=',')
+                #     for row in my_content:
+                #         if ticker in row:
+                #             valid.add(ticker)
 
         return valid
 
@@ -107,7 +111,7 @@ class GetData:
             # print(sentences)
 
             sentences = self.split_into_sentences(text)
-            print(sentences)
+            # print(sentences)
             # print(sentences)
 
             # TODO: if ticker appears twice it will overright so find a fix for that
