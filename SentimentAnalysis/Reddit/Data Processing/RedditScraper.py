@@ -18,17 +18,25 @@ class RedditScraper:
             user_agent=config.USER_AGENT
         )
 
+    # filter by search/flair
+    def searchSubreddit(self, query, sort, syntax, timeFilter):
+        for submission in reddit.subreddit(self.subreddit).search(query, sort=sort, syntax=syntax, time_filter=timeFilter ):
+            return submission
+
+    # Stream Daily/Weekend Discussion
+    def streamDiscussion(self):
+        pass
+
     # The tool scrapes WallStreetBets "hot" topics and scans for any tickers mentioned in the topic title. If a ticker or company name (ie: Amazon for $AMZN) is found, it continues to scan the comments of said topic.
     
     def streamSubmissions(self):
         for submission in self.reddit.subreddit(self.subreddit).stream.submissions():
-            print(submission.title, "|", submission.score)
+            return submission
 
     def streamComments(self):
         for comment in self.reddit.subreddit(self.subreddit).stream.comments():
-            print(comment.date, "|", comment.score)
+            return comment
         
-
     # Get submissions based on sort and time filter
     def topSubmissions(self, time_filter):   
         submissions = []
@@ -87,3 +95,17 @@ class RedditScraper:
         
         return commentsList
 
+# reddit = praw.Reddit(
+#     client_id=config.CLIENT_ID,
+#     client_secret=config.CLIENT_SECRET,
+#     user_agent=config.USER_AGENT
+# )
+
+# subreddit = reddit.subreddit("WallStreetBets")
+# # for comment in subreddit.stream.comments():
+# #     print(comment.parent_id, comment.author, comment.body)
+# asd = subreddit.sticky()
+# print(asd.title)
+
+# for submission in subreddit.stream():
+#     print(submission)

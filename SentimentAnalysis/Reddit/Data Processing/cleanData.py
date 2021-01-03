@@ -1,11 +1,4 @@
-# 2) Cleaning & Organizing the data 
-#       - we will walk through popular text pre-processing techniques
-#       - we will organize the cleaned data into a way that is easy to input into other algorithms
-
-
-# TODO: chart with sentiment analysis compared to price action
-# TODO: chart with insider trading compared to price action
-# TODO: use kaggle to prep sentiment analysis
+# Cleaning, Organizing, and store the data in the database 
 
 # Common data cleaning steps on all text:
     # Make text all lower case
@@ -16,8 +9,47 @@
     # Remove stop words
 
 
+# Import Libraries
+import string
+import re
+
+
+# TODO: chart with sentiment analysis compared to price action
+# TODO: chart with insider trading compared to price action
+# TODO: use kaggle to prep sentiment analysis
+
+
+
 
 class CleanData:
-    def __init__(self):
+    def __init__(self, id):
+        self.id = id
+    
+    def cleanText(self, text):        
+        # Make text lowercase
+        text = text.lower()
+        
+        # remove text in square brackets
+        text = re.sub('\[.*?\]', '', text)
+
+        # remove punctuation
+        text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+        
+        # remove words containing numbers
+        # text = re.sub('\w*\d\w*', '', text)
+       
+        print(text)
+        
+        # return text
+
+    def cleanSubmission(self):
         pass
 
+    def cleanComment(self):
+        pass
+
+a = CleanData("aasd")
+a.cleanText("""Best. Rode HyLN from $15 to $45
+
+
+Worst: bought Baba at $280 and sold at $219""")

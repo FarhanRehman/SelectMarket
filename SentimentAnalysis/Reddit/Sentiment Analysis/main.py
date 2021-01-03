@@ -35,7 +35,11 @@
 #     risingSubmissions(reddit, timeFilter)
 
 
+# r/WSB
 
+# r/investing
+
+# r/SPAC
 
 
 
