@@ -6,16 +6,16 @@ from nltk import tokenize
 import yfinance as yf
 import timeit
 import re
+from nltk.corpus import stopwords
 
 
 # starttime = timeit.default_timer()
 # print("The time difference is :", timeit.default_timer() - starttime)
 
-# TODO: add relative imports & fix file structures
+# TODO: make this faster
 # TODO: Set up CI/CD
-# TODO: Set up sqlite databasse (inside DB, keep count of number of mentions and positions)
 # TODO: should also recognize tickers by company names
-# TODO: start scraping user positions on stocks
+# TODO: recognize tickers that are misspelled, lowercase, using the company name instead of ticker
 
 
 class GetData:
@@ -25,8 +25,6 @@ class GetData:
         self.blacklistTickers = ["YOLO", "TOS", "CEO", "CFO", "CTO", "DD", "BTFD", "WSB", "OK", "RH", "KYS", "FD", "TYS", "US", "USA", "IT", "ATH", "RIP", "BMW", "GDP", "OTM", "ATM", "ITM", "IMO", "LOL", "DOJ", "BE", "PR", "PC", "ICE", "TYS", "ISIS", "PRAY", "PT", "FBI", "SEC", "GOD", "NOT", "POS", "COD", "AYYMD", "FOMO", "TL;DR", "EDIT", "STILL", "LGMA", "WTF", "RAW", "PM", "LMAO", "LMFAO", "ROFL", "EZ", "RED", "BEZOS", "TICK", "IS", "DOW" "AM", "PM", "LPT", "GOAT", "FL", "CA", "IL", "PDFUA", "MACD", "HQ", "OP", "DJIA", "PS", "AH", "TL", "DR", "JAN", "FEB", "JUL", "AUG", "SEP", "SEPT", "OCT", "NOV", "DEC", "FDA", "IV", "ER", "IPO", "RISE" "IPA", "URL", "MILF", "BUT", "SSN", "FIFA", "USD", "CPU", "AT", "GG", "ELON", "RSI", "CCP", "EOD", "EOY"]
 
 
-    # TODO: make this faster
-    # TODO: recognize tickers that are misspelled, lowercase, using the company name instead of ticker
     def valtiadeTickers(self, tickers):
         valid = set()
         db = DatabaseManager()
@@ -44,9 +42,6 @@ class GetData:
                 #             valid.add(ticker)
 
         return valid
-
-    # TODO: sentiment analysis comment with many tickers
-    # TODO: return dict with cleaned data as well so sentiment analysis can be Preformed
 
 
     def split_into_sentences(self, text):
@@ -82,12 +77,20 @@ class GetData:
         sentences = [s.strip() for s in sentences]
         return sentences
 
+    # TODO: increment mentions
+
     # This function wil parse all tickers and related text from a submission/comment, and output it in a dictionary/csv
     def parseTickers(self, text):
         # GET CLEANED DATA HERE
         
         text = text.replace('\n','')
         text = text.replace('\t','')
+        print(text)
+        print("---------------------------")
+
+        text = [word for word in text.split() if word not in stopwords.words('english')]
+        text = ' '.join(text)
+
         
         # Regex to identify stock tickers, we use a set here to avoid duplicates
         tickers = set(re.findall("(?:(?<=\A)|(?<=\s)|(?<=[$]))([A-Z]{1,5})(?=\s|$|[^a-zA-z])", text))

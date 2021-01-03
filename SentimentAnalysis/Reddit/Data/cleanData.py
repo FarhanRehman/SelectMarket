@@ -13,14 +13,6 @@
 import string
 import re
 
-
-# TODO: chart with sentiment analysis compared to price action
-# TODO: chart with insider trading compared to price action
-# TODO: use kaggle to prep sentiment analysis
-
-
-
-
 class CleanData:
     def __init__(self, id):
         self.id = id

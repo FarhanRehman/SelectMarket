@@ -2,6 +2,12 @@
 # TODO: run backtests on watchlists stocks:
 # TODO: average market sentiment
 # TODO: SPAC Mentions
+# TODO: chart with sentiment analysis compared to price action
+# TODO: chart with insider trading compared to price action
+# TODO: use kaggle to prep sentiment analysis
+# TODO: get module in for schduled tasks
+# TODO: In all files specify datatype for function parameters
+# TODO: error checking, catching, try/except blocks
 
 # when a stock enters watchlist 
 # 1) record its time upon entry into watchlist
@@ -9,7 +15,7 @@
 
 
 # Import Libraries
-import RedditScraper
+# import RedditScraper
 # from Data import getData
 
 # from Database.db import DatabaseManager
@@ -17,6 +23,17 @@ import RedditScraper
 # D = DatabaseManager()
 # D.setupDatabase()
 
+
+# D.insertWatchlist("TSLA", 0.123231, 123, 123)
+
+# D.incrementWatchlist("TSLA", "POSITIONS")
+# D.updateWatchlistSentiment("TSLA", 0.232123)
+
+# D.insertWatchlist("CHWY", 0.12321)
+
+
+
+# Main Program
 
 # subreddit = reddit.subreddit("WallStreetBets")
 # asd = subreddit.sticky()
