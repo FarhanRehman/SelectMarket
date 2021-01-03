@@ -27,8 +27,9 @@ class RedditScraper:
             return submission
 
     # Stream Daily/Weekend Discussion
-    def streamDiscussion(self):
-        pass
+    def wsbDiscussion(self):
+        return self.reddit.subreddit(self.subreddit).sticky()
+
 
     # The tool scrapes WallStreetBets "hot" topics and scans for any tickers mentioned in the topic title. If a ticker or company name (ie: Amazon for $AMZN) is found, it continues to scan the comments of said topic.
     
