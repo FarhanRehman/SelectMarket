@@ -1,10 +1,10 @@
 # 1) Getting the data - in this case, we'll be scraping data from a website
 
 # Import Libraries
+from Database.db import DatabaseManager
 from nltk import tokenize
 import yfinance as yf
 import timeit
-from Database.db import DatabaseManager
 import re
 
 

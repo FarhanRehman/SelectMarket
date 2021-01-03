@@ -1,9 +1,7 @@
 # Import Libraries
-import urllib.request
 import requests
 import sqlite3
 import pandas
-import csv
 
 class DatabaseManager:
     def __init__(self):
@@ -13,12 +11,12 @@ class DatabaseManager:
 
     def getUpdatedInfo(self):
         # URL to csv
-        # url = "https://dumbstockapi.com/stock?format=csv&countries=US"
+        url = "https://dumbstockapi.com/stock?format=csv&countries=US"
 
         # Get file, and write to directory
-        # response = requests.get(url)
-        # with open('output.csv', 'wb') as file:
-        #     file.write(response.content)
+        response = requests.get(url)
+        with open('output.csv', 'wb') as file:
+            file.write(response.content)
 
         pandas.read_csv("output.csv").to_sql("STOCKS", self.connection, if_exists='replace', index=False)
 
@@ -35,7 +33,9 @@ class DatabaseManager:
 
         # create statistics table
         self.cursor.execute("CREATE TABLE IF NOT EXISTS STATISTICS (COMMENTS INTEGER, MENTIONS INTEGER, POSITIONS INTEGER)")
+        self.cursor.execute("INSERT INTO STATISTICS VALUES (0, 0, 0)")
         
+
         # commit changes
         self.connection.commit()
         
@@ -55,6 +55,17 @@ class DatabaseManager:
             return True
         else:
             return False
+
+    def incrementStatistics(self, column):
+        # UPDATE {Table} SET {Column} = {Column} + {Value} WHERE {Condition}
+        self.cursor.execute(f"UPDATE STATISTICS SET {column} = {column} + 1")
+        
+        self.connection.commit()
+
+        print(f"incremented {column}")
+
+        return True
+
 
 
     def __del__(self):

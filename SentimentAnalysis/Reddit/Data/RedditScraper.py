@@ -1,10 +1,7 @@
 # Import Libraries
 from config import config
+from Database.db import DatabaseManager
 import praw
-
-
-
-# TODO: Set up sqlite databasse (inside DB, keep count of number of comments searched)
 
 # 1) Getting the data - in this case, we'll be scraping data from a reddit with PRAW
 
@@ -19,6 +16,10 @@ class RedditScraper:
             client_secret=config.CLIENT_SECRET,
             user_agent=config.USER_AGENT
         )
+
+        # Use this to increment statistics (Comments count, Mentions count, Positions count)
+        DB = DatabaseManager()
+        DB.incrementStatistics("COMMENTS")
 
     # filter by search/flair
     def searchSubreddit(self, query, sort, syntax, timeFilter):
@@ -97,14 +98,3 @@ class RedditScraper:
         
         return commentsList
 
-# reddit = praw.Reddit(
-#     client_id=CLIENT_ID,
-#     client_secret=CLIENT_SECRET,
-#     user_agent=USER_AGENT
-# )
-
-# subreddit = reddit.subreddit("WallStreetBets")
-# # for comment in subreddit.stream.comments():
-# #     print(comment.parent_id, comment.author, comment.body)
-# asd = subreddit.sticky()
-# print(asd.title)
