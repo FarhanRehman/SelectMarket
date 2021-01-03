@@ -8,3 +8,7 @@ config.py
 settings.json
 
 tempCodeRunnerFile.py
+
+output.csv
+
+Databse.db
