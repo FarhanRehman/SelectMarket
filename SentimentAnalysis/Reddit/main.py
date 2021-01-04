@@ -1,14 +1,18 @@
 # TODO: average market sentiment
 # TODO: SPAC Mentions
+# TODO: IPO meantions
 # TODO: chart with sentiment analysis compared to price action
 # TODO: chart with insider trading compared to price action
 # TODO: get module in for schduled tasks
 # TODO: In all files specify datatype for function parameters
 # TODO: error checking, catching, try/except blocks
 # TODO: when a stock enters watchlist 
+# TODO: r/wsb METABASE stats 
 # 1) record its time upon entry into watchlist
 # 2) depending on current stock price you can see if the price increased or decreased (represent this in percentages) 
 
+# TODO: set up a virtual environment
+# TODO: start commiting code to SelectMarket organization
 
 # Import Libraries
 from DataProcessing.organizeData import OrganizeData
@@ -35,13 +39,13 @@ Reddit = RedditScraper(subreddit)
 
 # Daily/Weekend discussion thread
 stickiedPost = Reddit.wsbDiscussion()
-comments = Reddit.getComments("koiz6w", "top")
+comments = Reddit.getComments("kpsy0b")
 
 # print(comments)
 
 for comment in comments:
     # Clean text using cleanData
-    CleanedData = CleanData(comment).cleanText()
+    CleanedData = CleanData(comment).cleanTextRoundOne()
     
     # Parse cleaned data with organizedData
     OrganizedData = OrganizeData(CleanedData).parseTickers()

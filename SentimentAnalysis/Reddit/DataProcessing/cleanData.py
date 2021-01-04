@@ -24,33 +24,65 @@
 
 
 # Import Libraries
-from nltk.corpus import stopwords
 from nltk import tokenize
 import string
+import spacy
+import nltk
 import re
 
 class CleanData:
     def __init__(self, text):
         self.text = text
-        self.blacklistTickers = {"YOLO", "TOS", "CEO", "CFO", "CTO", "DD", "BTFD", "WSB", "OK", "RH", "KYS", "FD", "TYS", "US", "USA", "IT", "ATH", "RIP", "BMW", "GDP", "OTM", "ATM", "ITM", "IMO", "LOL", "DOJ", "BE", "PR", "PC", "ICE", "TYS", "ISIS", "PRAY", "PT", "FBI", "SEC", "GOD", "NOT", "POS", "COD", "AYYMD", "FOMO", "TL;DR", "EDIT", "STILL", "LGMA", "WTF", "RAW", "PM", "LMAO", "LMFAO", "ROFL", "EZ", "RED", "BEZOS", "TICK", "IS", "DOW" "AM", "PM", "LPT", "GOAT", "FL", "CA", "IL", "PDFUA", "MACD", "HQ", "OP", "DJIA", "PS", "AH", "TL", "DR", "JAN", "FEB", "JUL", "AUG", "SEP", "SEPT", "OCT", "NOV", "DEC", "FDA", "IV", "ER", "IPO", "RISE" "IPA", "URL", "MILF", "BUT", "SSN", "FIFA", "USD", "CPU", "AT", "GG", "ELON", "RSI", "CCP", "EOD", "EOY", "I"}
+        self.blacklistWords = ["YOLO", "TOS", "CEO", "CFO", "CTO", "DD", "BTFD", "WSB", "OK", "RH", "KYS", "FD", "TYS", "US", "USA", "IT", "ATH", "RIP", "BMW", "GDP", "OTM", "ATM", "ITM", "IMO", "LOL", "DOJ", "BE", "PR", "PC", "ICE", "TYS", "ISIS", "PRAY", "PT", "FBI", "SEC", "GOD", "NOT", "POS", "COD", "AYYMD", "FOMO", "TL;DR", "EDIT", "STILL", "LGMA", "WTF", "RAW", "PM", "LMAO", "LMFAO", "ROFL", "EZ", "RED", "BEZOS", "TICK", "IS", "DOW" "AM", "PM", "LPT", "GOAT", "FL", "CA", "IL", "PDFUA", "MACD", "HQ", "OP", "DJIA", "PS", "AH", "TL", "DR", "JAN", "FEB", "JUL", "AUG", "SEP", "SEPT", "OCT", "NOV", "DEC", "FDA", "IV", "ER", "IPO", "RISE" "IPA", "URL", "MILF", "BUT", "SSN", "FIFA", "USD", "CPU", "AT", "GG", "ELON", "RSI", "CCP", "EOD", "EOY", "I"]
     
 
-    def cleanText(self):        
-        # remove punctuation
-        # self.text = re.sub('[%s]' % re.escape(string.punctuation), '', self.text)
+    def cleanTextRoundOne(self):
+        # TODO: make this custom to format on r/WSB
 
-        self.text  = [word for word in re.split("\W+", self.text) if word.lower() not in self.blacklistTickers]
-        self.text = ''.join(self.text)
+        # CLean text so its easier to identify tickers
 
-        self.text = self.text.replace('\n','')
-        self.text = self.text.replace('\t','')
+        # remove custom stop words
+        # self.text  = [word for word in re.split("\W+", self.text) if word.lower() not in self.blacklistTickers]
+        # self.text = ' '.join(self.text)
+
+        # Tokenizing with spacy
+        # nlp = spacy.load("en_core_web_sm")
+        # doc = nlp(self.text)
+        # token_list = [token for token in doc]
+
+        # Add custom stopwords to NLTK stopwords list
+        stopwords = nltk.corpus.stopwords.words('english')
+        stopwords.extend(self.blacklistWords)
 
         # Remove stop words using NLTK
-        self.text = [word for word in self.text.split() if word not in stopwords.words('english')]
+        self.text = [word for word in self.text.split() if word not in stopwords]
         self.text = ' '.join(self.text)
+
+        # remove standard stop words with spacy
+        # nlp = spacy.load("en_core_web_sm")
+        # sentence = nlp(self.text)        
+
+        # # Normalizing Words with spacy
+        # lemmas = [f"Token: {token}, lemma: {token.lemma_}" for token in filtered_tokens]
+        # print(lemmas)
+
+        # seperate tickers based on sentences
+        # sentences = tokenize.sent_tokenize(text)
+        # print(sentences)
+
 
         
         return self.text
+
+    def cleanTextRoundTwo(self):
+        # clean text to get extra ready for sentiment analysis
+
+        # Vectorizing Text with spacy
+        # a = filtered_tokens[1].vector
+        # print(a)
+        # self.text = self.text.replace('\n','')
+        # self.text = self.text.replace('\t','')
+        pass
 
     def split_into_sentences(self, text):
         alphabets= "([A-Za-z])"
@@ -85,3 +117,10 @@ class CleanData:
         sentences = [s.strip() for s in sentences]
         return sentences
 
+# a = CleanData("""I would take profits on SQ, SBE, TSLA (sooner than later), and FB. Most of these are run up beyond reason. The mania will correct at some point and you don't want to be bag holding. Vertical green lines are not normal. Also you can get back in when they cool off.
+
+
+# I personally am moving out from Google and Facebook. Antitrust may take some time but I personally don't want to invest in pure ads. AMZN and AAPL in comparison are more diversified revenue streams. Wouldn't take as big of a topple if the government broke them up.
+
+
+# My portfolio for reference AAPL, MSFT, AMZN, GOOGL, AMD, NVDIA, DIS, NFLX, TSLA. I plan to transition out of AMD, GOOGL, and TSLA at some point. TSLA probably soon. AMD and GOOGL are holds for now. AAPL is my largest holding. I believe MSFT and AMZN are coming for that top spot with Azure and AWS.""").cleanText()

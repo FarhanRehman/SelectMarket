@@ -1,5 +1,6 @@
 # Import Libraries
 from Database.db import DatabaseManager
+from praw.models import MoreComments
 from config import config
 import praw
 
@@ -83,21 +84,26 @@ class RedditScraper:
         return submissions
 
     # Get comments based on sort
-    def getComments(self, id, sort):
+    def getComments(self, id):
         submission = self.reddit.submission(id=id)
         commentsList = []
 
         # set sort category
-        submission.comment_sort = sort
+        # submission.comment_sort = sort
 
         # make comment limit to ~25% of total comments
-        submission.comment_limit = round(submission.num_comments * 0.25)
+        # submission.comment_limit = round(submission.num_comments * 0.25)
 
-        submission.comments.replace_more(limit=None, threshold=0)
+        # submission.comments.replace_more(limit=None, threshold=0)
         
-        for comment in submission.comments:
-            print(comment)
-            commentsList.append(comment.body)
-        
+        # for comment in submission.comments:
+        #     print(comment)
+        #     commentsList.append(comment.body)
+
+        for top_level_comment in submission.comments:
+            if isinstance(top_level_comment, MoreComments):
+                continue
+            commentsList.append(top_level_comment.body)
+
         return commentsList
 
