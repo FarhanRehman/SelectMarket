@@ -30,6 +30,12 @@ import spacy
 import nltk
 import re
 
+"""
+Replace '/' with space
+Seperate Compound words 
+
+"""
+
 class CleanData:
     def __init__(self, text):
         self.text = text
@@ -37,18 +43,7 @@ class CleanData:
     
 
     def cleanTextRoundOne(self):
-        # TODO: make this custom to format on r/WSB
-
-        # CLean text so its easier to identify tickers
-
-        # remove custom stop words
-        # self.text  = [word for word in re.split("\W+", self.text) if word.lower() not in self.blacklistTickers]
-        # self.text = ' '.join(self.text)
-
-        # Tokenizing with spacy
-        # nlp = spacy.load("en_core_web_sm")
-        # doc = nlp(self.text)
-        # token_list = [token for token in doc]
+        # Clean text so its easier to identify tickers
 
         # Add custom stopwords to NLTK stopwords list
         stopwords = nltk.corpus.stopwords.words('english')
@@ -57,36 +52,44 @@ class CleanData:
         # Remove stop words using NLTK
         self.text = [word for word in self.text.split() if word not in stopwords]
         self.text = ' '.join(self.text)
+        
+        # Tokenizing with NLTK
+        self.text = tokenize.sent_tokenize(self.text)
+        self.text = ' '.join(self.text)
 
-        # remove standard stop words with spacy
+
+        # self.text = self.text.replace('\n','')
+
+        # # Tokenizing with spacy
         # nlp = spacy.load("en_core_web_sm")
-        # sentence = nlp(self.text)        
-
-        # # Normalizing Words with spacy
-        # lemmas = [f"Token: {token}, lemma: {token.lemma_}" for token in filtered_tokens]
-        # print(lemmas)
-
-        # seperate tickers based on sentences
-        # sentences = tokenize.sent_tokenize(text)
-        # print(sentences)
-
-
+        # doc = nlp(self.text)
+        # # self.text = [token.text for token in doc]
+        
+        # # # remove standard stop words with spacy
+        # nlp = spacy.load("en_core_web_sm")
+        # nlp.Defaults.stop_words |= set(self.blacklistWords)
+        # self.text = [token for token in doc if not token.is_stop]
         
         return self.text
 
     def cleanTextRoundTwo(self):
         # clean text to get extra ready for sentiment analysis
-
+        # # Normalizing Words with spacy
+        # self.text = [f"Token: {token}, lemma: {token.lemma_}" for token in self.text]
+        
         # Vectorizing Text with spacy
-        # a = filtered_tokens[1].vector
-        # print(a)
-        # self.text = self.text.replace('\n','')
-        # self.text = self.text.replace('\t','')
+        # self.text = self.text[1].vector
+
         pass
 
-    def split_into_sentences(self, text):
+    def tokenize(self, text):
+        # only tokenize by sentences, and spaces
+
+
         alphabets= "([A-Za-z])"
-        prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
+        prefixes = "(Mr|St|Mrs|Ms|Dr|Prof|Capt|Cpt|Lt|Mt)[.]"
+        websites = "[.](com|net|org|io|gov|me|edu)"
+        if "..." in text: text = text.replace("...","<prd><prd><prd>")        
         suffixes = "(Inc|Ltd|Jr|Sr|Co)"
         starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
         acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
@@ -117,10 +120,3 @@ class CleanData:
         sentences = [s.strip() for s in sentences]
         return sentences
 
-# a = CleanData("""I would take profits on SQ, SBE, TSLA (sooner than later), and FB. Most of these are run up beyond reason. The mania will correct at some point and you don't want to be bag holding. Vertical green lines are not normal. Also you can get back in when they cool off.
-
-
-# I personally am moving out from Google and Facebook. Antitrust may take some time but I personally don't want to invest in pure ads. AMZN and AAPL in comparison are more diversified revenue streams. Wouldn't take as big of a topple if the government broke them up.
-
-
-# My portfolio for reference AAPL, MSFT, AMZN, GOOGL, AMD, NVDIA, DIS, NFLX, TSLA. I plan to transition out of AMD, GOOGL, and TSLA at some point. TSLA probably soon. AMD and GOOGL are holds for now. AAPL is my largest holding. I believe MSFT and AMZN are coming for that top spot with Azure and AWS.""").cleanText()

@@ -40,7 +40,7 @@ class RedditScraper:
 
     def streamComments(self):
         for comment in self.reddit.subreddit(self.subreddit).stream.comments():
-            return comment
+            return comment.body
         
     # Get submissions based on sort and time filter
     def topSubmissions(self, time_filter):   
@@ -84,17 +84,18 @@ class RedditScraper:
         return submissions
 
     # Get comments based on sort
-    def getComments(self, id):
+    def getComments(self, id, sort):
         submission = self.reddit.submission(id=id)
         commentsList = []
 
         # set sort category
-        # submission.comment_sort = sort
+        submission.comment_sort = sort
 
         # make comment limit to ~25% of total comments
-        # submission.comment_limit = round(submission.num_comments * 0.25)
-
-        # submission.comments.replace_more(limit=None, threshold=0)
+        submission.comment_limit = round(submission.num_comments * 0.25)
+        print("asdasasd")
+        # submission.comments.replace_more(limit=200, threshold=0)
+        print("asdasasd")
         
         # for comment in submission.comments:
         #     print(comment)
@@ -103,6 +104,7 @@ class RedditScraper:
         for top_level_comment in submission.comments:
             if isinstance(top_level_comment, MoreComments):
                 continue
+            
             commentsList.append(top_level_comment.body)
 
         return commentsList

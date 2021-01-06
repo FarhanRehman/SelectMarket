@@ -99,7 +99,7 @@ class DatabaseManager:
         else:
             return False
 
-    def __del__(self):
+    def closeDB(self):
         self.connection.close()
         print("connection closeed")
 

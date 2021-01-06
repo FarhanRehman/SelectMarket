@@ -44,7 +44,7 @@ class OrganizeData:
 
 
         # TODO: check out some ways to split into sentences (should seperate by \n as well), check out nltk and regex examples
-        sentences = CleanData(self.text).split_into_sentences(self.text)
+        sentences = CleanData(self.text).tokenize(self.text)
 
         # turn set returned from valtiadeTickers() into dictionary
         parsedDict = dict.fromkeys(sentences, tuple())
